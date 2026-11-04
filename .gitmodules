@@ -1,0 +1,24 @@
+[submodule "repos/DecayWatch"]
+	path = repos/DecayWatch
+	url = https://github.com/hexsyro/DecayWatch.git
+[submodule "repos/EnrichAudit"]
+	path = repos/EnrichAudit
+	url = https://github.com/hexsyro/EnrichAudit.git
+[submodule "repos/FilterGap"]
+	path = repos/FilterGap
+	url = https://github.com/hexsyro/FilterGap.git
+[submodule "repos/LinguaCheck"]
+	path = repos/LinguaCheck
+	url = https://github.com/hexsyro/LinguaCheck.git
+[submodule "repos/NuanceBench"]
+	path = repos/NuanceBench
+	url = https://github.com/hexsyro/NuanceBench.git
+[submodule "repos/ReadyPack"]
+	path = repos/ReadyPack
+	url = https://github.com/hexsyro/ReadyPack.git
+[submodule "repos/SourceLock"]
+	path = repos/SourceLock
+	url = https://github.com/hexsyro/SourceLock.git
+[submodule "repos/WhyChanged"]
+	path = repos/WhyChanged
+	url = https://github.com/hexsyro/WhyChanged.git

@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "honestypipeline"
+version = "0.1.0"
+description = "Run DecayWatch, EnrichAudit, FilterGap, LinguaCheck, NuanceBench, ReadyPack, SourceLock, and WhyChanged as one pipeline."
+readme = "README.md"
+license = "MIT"
+authors = [{ name = "hexsyro", email = "hexsyro@gmail.com" }]
+requires-python = ">=3.10"
+dependencies = []
+keywords = ["data-quality", "audit", "pipeline", "dataset"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+]
+
+[project.scripts]
+honestypipeline = "honestypipeline.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
