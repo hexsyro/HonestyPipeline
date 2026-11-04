@@ -10,16 +10,16 @@ The individual tools stay separate (they are included as git submodules under
 
 ## What the audit family checks
 
-| Tool | What it does |
-| --- | --- |
-| **DecayWatch** | Measures how much of a previously collected dataset still exists: survival rates, metadata drift, representativity, and purged records. |
-| **EnrichAudit** | Finds bugs that enrichment pipelines keep shipping, such as impossible rates, mismatches, and stale fields. |
-| **FilterGap** | Scores social/listening mentions with layered signals to catch spam and bots that cheap tools count as engagement. |
-| **LinguaCheck** | Flags sentiment scores computed in languages the model does not actually speak. |
-| **NuanceBench** | Scores any sentiment tool against a curated set of hard sentences (sarcasm, slang, emoji, mixed language). |
-| **SourceLock** | Catches unsupported claims in AI-generated summaries relative to their source posts. |
-| **WhyChanged** | Explains significant shifts in a tracked metric and localizes slow regime changes. |
-| **ReadyPack** | Aggregates every finding above into a data-health score, datasheet, Croissant metadata, changelog, and human-readable report, and packages the dataset. |
+| Tool | Repository | What it does |
+| --- | --- | --- |
+| **DecayWatch** | [hexsyro/DecayWatch](https://github.com/hexsyro/DecayWatch) | Measures how much of a previously collected dataset still exists: survival rates, metadata drift, representativity, and purged records. |
+| **EnrichAudit** | [hexsyro/EnrichAudit](https://github.com/hexsyro/EnrichAudit) | Finds bugs that enrichment pipelines keep shipping, such as impossible rates, mismatches, and stale fields. |
+| **FilterGap** | [hexsyro/FilterGap](https://github.com/hexsyro/FilterGap) | Scores social/listening mentions with layered signals to catch spam and bots that cheap tools count as engagement. |
+| **LinguaCheck** | [hexsyro/LinguaCheck](https://github.com/hexsyro/LinguaCheck) | Flags sentiment scores computed in languages the model does not actually speak. |
+| **NuanceBench** | [hexsyro/NuanceBench](https://github.com/hexsyro/NuanceBench) | Scores any sentiment tool against a curated set of hard sentences (sarcasm, slang, emoji, mixed language). |
+| **SourceLock** | [hexsyro/SourceLock](https://github.com/hexsyro/SourceLock) | Catches unsupported claims in AI-generated summaries relative to their source posts. |
+| **WhyChanged** | [hexsyro/WhyChanged](https://github.com/hexsyro/WhyChanged) | Explains significant shifts in a tracked metric and localizes slow regime changes. |
+| **ReadyPack** | [hexsyro/ReadyPack](https://github.com/hexsyro/ReadyPack) | Aggregates every finding above into a data-health score, datasheet, Croissant metadata, changelog, and human-readable report, and packages the dataset. |
 
 ## Install
 
