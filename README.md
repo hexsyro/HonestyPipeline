@@ -8,6 +8,8 @@ The individual tools stay separate (they are included as git submodules under
 `repos/`); this repository only adds an orchestrator that imports each tool's
 `run()` function, collects its findings, and folds them into ReadyPack.
 
+![Anti-Scraping Playwright](docs/banner.png)
+
 ## What the audit family checks
 
 | Tool | Repository | What it does |
