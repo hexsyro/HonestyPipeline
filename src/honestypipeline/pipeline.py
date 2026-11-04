@@ -113,7 +113,7 @@ def run_pipeline(rows: list[dict], options: dict[str, Any] | None = None) -> Pip
     try:
         rp_result = run_readypack(rows, rp_opts)
     except Exception as exc:
-        from common import ToolResult  # type: ignore  # noqa: E402
+        from readypack.common import ToolResult  # noqa: E402
 
         rp_result = ToolResult(status="error", findings=[], warnings=[str(exc)], summary={"checked": len(rows)})
     rp_envelope = _to_envelope("readypack", rp_result)

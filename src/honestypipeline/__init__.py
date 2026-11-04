@@ -7,6 +7,7 @@ ensure_paths()
 from honestypipeline import pipeline as _pipeline  # noqa: E402
 
 __version__ = "0.1.0"
-__all__ = ["__version__", "run_pipeline"]
+__all__ = ["__version__", "PipelineResult", "run_pipeline"]
 
+PipelineResult = _pipeline.PipelineResult
 run_pipeline = _pipeline.run_pipeline

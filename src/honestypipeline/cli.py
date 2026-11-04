@@ -39,6 +39,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--fail-on",
         choices=["none", "low", "medium", "high"],
+        type=str.lower,
         default="none",
         help="exit 1 if any finding is at or above this severity (default: none)",
     )
@@ -116,7 +117,7 @@ def main(argv: list[str] | None = None) -> int:
         worst = worst_severity(tool_result)
         from readypack.common import SEVERITY_RANK  # noqa: E402
 
-        if worst and SEVERITY_RANK.get(worst, 0) >= SEVERITY_RANK[args.fail_on]:
+        if worst and SEVERITY_RANK.get(str(worst).lower(), 0) >= SEVERITY_RANK[args.fail_on.lower()]:
             return 1
     return 0
 
