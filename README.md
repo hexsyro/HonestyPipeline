@@ -1,5 +1,7 @@
 # HonestyPipeline
 
+![Anti-Scraping Playwright](docs/banner.png)
+
 Run the entire audit family — DecayWatch, EnrichAudit, FilterGap, LinguaCheck,
 NuanceBench, ReadyPack, SourceLock, and WhyChanged — as a single pipeline over
 one dataset, and package the result.
@@ -7,8 +9,6 @@ one dataset, and package the result.
 The individual tools stay separate (they are included as git submodules under
 `repos/`); this repository only adds an orchestrator that imports each tool's
 `run()` function, collects its findings, and folds them into ReadyPack.
-
-![Anti-Scraping Playwright](docs/banner.png)
 
 ## What the audit family checks
 
