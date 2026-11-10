@@ -85,10 +85,15 @@ def _options_for(tool: str, pipeline_options: dict[str, Any]) -> dict[str, Any]:
 def run_pipeline(rows: list[dict], options: dict[str, Any] | None = None) -> PipelineResult:
     """Run all eight audits and fold their findings into a ReadyPack pack."""
     options = options or {}
+    rows = list(rows)
     out = PipelineResult()
 
     reports: list[dict] = []
-    for tool, runner in RUNNERS:
+    for tool, _runner in RUNNERS:
+        # Resolve the runner from globals so monkeypatching
+        # ``honestypipeline.pipeline.run_<tool>`` takes effect, while still
+        # honouring any patched ``RUNNERS`` entries.
+        runner = globals().get(f"run_{tool}", _runner)
         tool_opts = _options_for(tool, options)
         try:
             result = runner(rows, tool_opts)
