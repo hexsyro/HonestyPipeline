@@ -1,4 +1,9 @@
-"""Locate the vendored audit-tool submodules and put their src dirs on sys.path."""
+"""Locate the vendored audit-tool submodules and put their src dirs on sys.path.
+
+Submodule sources always take precedence over sibling development checkouts.
+The sibling fallback exists for working outside the packaged layout, but must
+never shadow the versions pinned by this repository.
+"""
 
 from __future__ import annotations
 
@@ -21,17 +26,26 @@ _TOOL_DIRS = {
 
 
 def ensure_paths() -> None:
-    """Add each submodule's src directory to sys.path (idempotent)."""
-    for module, dirname in _TOOL_DIRS.items():
+    """Add tool src directories to sys.path with submodules first (idempotent)."""
+    sources: list[str] = []
+    fallbacks: list[str] = []
+
+    for dirname in _TOOL_DIRS.values():
         src = REPOS_DIR / dirname / "src"
-        if src.is_dir() and str(src) not in sys.path:
-            sys.path.insert(0, str(src))
-    # Fallback for development outside the packaged repo layout.
+        if src.is_dir():
+            sources.append(str(src))
+
     fallback_root = REPO_ROOT.parent
     for dirname in _TOOL_DIRS.values():
         src = fallback_root / dirname / "src"
-        if src.is_dir() and str(src) not in sys.path:
-            sys.path.insert(0, str(src))
+        if src.is_dir():
+            fallbacks.append(str(src))
+
+    # Re-insert in priority order: lower priority first so it ends up last.
+    for path in list(reversed(fallbacks)) + list(reversed(sources)):
+        if path in sys.path:
+            sys.path.remove(path)
+        sys.path.insert(0, path)
 
 
 ensure_paths()

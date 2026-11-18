@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hexsyro/HonestyPipeline/schema/honestypipeline-result.schema.json",
+  "title": "HonestyPipeline --format json result",
+  "type": "object",
+  "required": ["tool", "version", "schemaVersion", "status", "run", "findings", "warnings", "summary", "tools"],
+  "properties": {
+    "tool": { "const": "honestypipeline" },
+    "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+" },
+    "schemaVersion": { "const": "1.1" },
+    "status": { "type": "string", "enum": ["success", "error"] },
+    "run": { "$ref": "#/$defs/runManifest" },
+    "findings": { "type": "array", "items": { "$ref": "#/$defs/finding" } },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "summary": { "type": "object" },
+    "tools": { "type": "object", "additionalProperties": { "$ref": "#/$defs/envelope" } }
+  },
+  "$defs": {
+    "runManifest": {
+      "type": "object",
+      "required": ["schema_version", "tool", "version", "run_id", "input", "tools"],
+      "properties": {
+        "schema_version": { "const": "1.1" },
+        "tool": { "const": "honestypipeline" },
+        "version": { "type": "string" },
+        "run_id": { "type": "string" },
+        "started_at": { "type": "string" },
+        "finished_at": { "type": "string" },
+        "duration_ms": { "type": "integer", "minimum": 0 },
+        "status": { "type": "string" },
+        "input": {
+          "type": "object",
+          "properties": {
+            "path": { "type": ["string", "null"] },
+            "sha256": { "type": ["string", "null"] },
+            "rows_sha256": { "type": ["string", "null"] },
+            "rows": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "options": { "type": "object" },
+        "tools": { "type": "object" },
+        "health_score": { "type": "object" },
+        "warnings": { "type": "array" }
+      }
+    },
+    "envelope": {
+      "type": "object",
+      "required": ["tool", "version", "status", "findings", "warnings", "summary"],
+      "properties": {
+        "tool": { "type": "string" },
+        "version": { "type": "string" },
+        "status": { "type": "string" },
+        "findings": { "type": "array", "items": { "$ref": "#/$defs/finding" } },
+        "warnings": { "type": "array", "items": { "type": "string" } },
+        "summary": { "type": "object" }
+      }
+    },
+    "finding": {
+      "type": "object",
+      "required": ["severity", "message"],
+      "properties": {
+        "severity": { "type": "string", "enum": ["low", "medium", "high"] },
+        "field": { "type": "string" },
+        "message": { "type": "string" },
+        "record_id": { "type": ["string", "null"] },
+        "metadata": { "type": "object" }
+      },
+      "additionalProperties": true
+    }
+  }
+}

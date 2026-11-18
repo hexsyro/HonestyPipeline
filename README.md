@@ -64,7 +64,20 @@ config.json` to tune any underlying tool (top-level keys: `decaywatch`,
 | `--name` | Dataset name for the packaged report. |
 | `--description` | Dataset description. |
 | `--drop-id` | Drop a reviewed row id (repeatable). |
+| `--only`, `--skip` | Run or skip selected audits (comma-separated tool names). |
+| `--list-tools` | Print available audits and their versions. |
+| `--cache-dir`, `--no-cache` | Cache audit envelopes by input+version+options. |
+| `--baseline`, `--fail-on-regression` | Compare with a previous JSON run and fail on regressions. |
+| `--version-tag` | Dataset version recorded in Croissant metadata. |
+| `--explain` | Show FilterGap signal explanations in table output. |
+| `--quiet`, `-q` | Suppress progress messages on stderr. |
 | `--version` | Print version and exit. |
+
+Exit codes: `0` success, `1` `--fail-on` gate or regression tripped, `2`
+usage/config/input error, `3` an audit tool errored, `130` interrupted. See
+`honestypipeline --help`. Argument files are supported with `@args.txt`.
+The JSON output has a published contract at
+[`schema/honestypipeline-result.schema.json`](schema/honestypipeline-result.schema.json).
 
 ## Configuration
 
@@ -103,6 +116,12 @@ result.summary["health_score"]["score"]
 - `summary` — ReadyPack summary, including the data-health score.
 - `tools` — per-tool envelopes (`decaywatch`, `enrichaudit`, …).
 - `readypack` — the ReadyPack envelope.
+- `schema_version`, `run_id`, `started_at`, `finished_at`, `duration_ms`,
+  `input_fingerprint`, `tool_runs` — reproducibility metadata (v0.2.0).
+
+Findings that several audits raise for the same `record_id` + `field` are
+tagged with `metadata.corroboration`; the count is in
+`summary.corroborated_findings`.
 
 ## Output package
 
@@ -113,10 +132,30 @@ With `--out DIR`, HonestyPipeline writes:
 - `croissant.json` — Croissant (mlcommons) metadata.
 - `changelog.json` — the action history.
 - `report.md` — a human-readable report.
+- `run.json` — provenance manifest (input hash, tool versions, timings, options).
+- `datasheet.json`, `dataset.jsonld`, `findings.json` — machine-readable
+  documentation (Datasheets, schema.org/Dataset, normalized findings).
 - `package.zip` — all of the above zipped together.
 
 Nothing is deleted silently; rows leave the export only via explicit, reviewed
 `--drop-id` values, and every action is recorded in the changelog.
+
+## Reproducibility and CI
+
+`--format json` includes a `run` manifest so a report can be reproduced and
+audited later. Store it as a baseline and gate future runs:
+
+```bash
+honestypipeline data.csv --format json -o baseline.json
+honestypipeline data.csv --baseline baseline.json --fail-on-regression --fail-on high
+```
+
+Use `--cache-dir .cache/honestypipeline` to skip unchanged audits and `--only`
+to re-run just one tool before re-packaging. `--out` always writes `run.json`
+alongside the dataset package.
+
+The v0.2.0 upgrade and the research behind it are documented in
+[docs/RELEASE_NOTES_v0.2.0.md](docs/RELEASE_NOTES_v0.2.0.md).
 
 ## Development
 
