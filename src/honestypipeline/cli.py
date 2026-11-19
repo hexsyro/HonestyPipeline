@@ -13,15 +13,16 @@ from honestypipeline._paths import ensure_paths
 
 ensure_paths()
 
-from honestypipeline.manifest import (  # noqa: E402
+from readypack.common import ToolResult
+from readypack.export import write_package
+from readypack.output import render, worst_severity
+
+from honestypipeline.manifest import (
     build_run_manifest,
     compare_baseline,
     fingerprint_file,
 )
-from honestypipeline.pipeline import TOOL_NAMES, TOOL_VERSIONS, PipelineResult, run_pipeline  # noqa: E402
-from readypack.common import ToolResult  # noqa: E402
-from readypack.export import write_package  # noqa: E402
-from readypack.output import render, worst_severity  # noqa: E402
+from honestypipeline.pipeline import TOOL_NAMES, TOOL_VERSIONS, PipelineResult, run_pipeline
 
 TOOL = "honestypipeline"
 
@@ -130,7 +131,7 @@ def main(argv: list[str] | None = None) -> int:
     except (OSError, ValueError, TypeError, json.JSONDecodeError) as exc:
         print(f"{TOOL}: {exc}", file=sys.stderr)
         return 2
-    from readypack.common import load_rows  # noqa: E402
+    from readypack.common import load_rows
 
     try:
         rows = load_rows(args.data)
@@ -245,7 +246,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.fail_on != "none":
         tool_result = ToolResult(status=result.status, findings=result.findings, warnings=result.warnings)
         worst = worst_severity(tool_result)
-        from readypack.common import SEVERITY_RANK  # noqa: E402
+        from readypack.common import SEVERITY_RANK
 
         if worst and SEVERITY_RANK.get(str(worst).lower(), 0) >= SEVERITY_RANK[args.fail_on.lower()]:
             gate_tripped = True

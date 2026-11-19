@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 import uuid
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from time import perf_counter
-from typing import Any, Callable
+from typing import Any
 
 from honestypipeline._paths import ensure_paths
 from honestypipeline.manifest import (
@@ -19,22 +20,22 @@ from honestypipeline.manifest import (
 
 ensure_paths()
 
-import decaywatch  # noqa: E402
-import enrichaudit  # noqa: E402
-import filtergap  # noqa: E402
-import linguacheck  # noqa: E402
-import nuancebench  # noqa: E402
-import readypack  # noqa: E402
-import sourcelock  # noqa: E402
-import whychanged  # noqa: E402
-from decaywatch import run as run_decaywatch  # noqa: E402
-from enrichaudit import run as run_enrichaudit  # noqa: E402
-from filtergap import run as run_filtergap  # noqa: E402
-from linguacheck import run as run_linguacheck  # noqa: E402
-from nuancebench import run as run_nuancebench  # noqa: E402
-from readypack import run as run_readypack  # noqa: E402
-from sourcelock import run as run_sourcelock  # noqa: E402
-from whychanged import run as run_whychanged  # noqa: E402
+import decaywatch
+import enrichaudit
+import filtergap
+import linguacheck
+import nuancebench
+import readypack
+import sourcelock
+import whychanged
+from decaywatch import run as run_decaywatch
+from enrichaudit import run as run_enrichaudit
+from filtergap import run as run_filtergap
+from linguacheck import run as run_linguacheck
+from nuancebench import run as run_nuancebench
+from readypack import run as run_readypack
+from sourcelock import run as run_sourcelock
+from whychanged import run as run_whychanged
 
 TOOL_VERSIONS = {
     "decaywatch": getattr(decaywatch, "__version__", "0.1.0"),
@@ -116,7 +117,7 @@ def _name_list(value: Any, label: str) -> list[str]:
     elif isinstance(value, (list, tuple, set)):
         items = [str(part).strip() for part in value if str(part).strip()]
     else:
-        raise ValueError(f"{label} must be a comma-separated string or a list of tool names")
+        raise TypeError(f"{label} must be a comma-separated string or a list of tool names")
     unknown = [item for item in items if item not in TOOL_NAMES]
     if unknown:
         raise ValueError(f"unknown tool name(s) for {label}: {', '.join(unknown)}. Valid: {', '.join(TOOL_NAMES)}")
@@ -124,13 +125,15 @@ def _name_list(value: Any, label: str) -> list[str]:
 
 
 def _tool_enabled(tool: str, options: dict[str, Any]) -> bool:
-    for section in (options.get("tools"),):
-        if isinstance(section, dict) and isinstance(section.get(tool), dict):
-            if section[tool].get("enabled") is False:
-                return False
-    if isinstance(options.get(tool), dict) and options[tool].get("enabled") is False:
+    tools_section = options.get("tools")
+    if (
+        isinstance(tools_section, dict)
+        and isinstance(tools_section.get(tool), dict)
+        and tools_section[tool].get("enabled") is False
+    ):
         return False
-    return True
+    direct = options.get(tool)
+    return not (isinstance(direct, dict) and direct.get("enabled") is False)
 
 
 def _notify(progress: Progress | None, tool: str, state: str) -> None:
@@ -138,7 +141,7 @@ def _notify(progress: Progress | None, tool: str, state: str) -> None:
         return
     try:
         progress(tool, state)
-    except Exception:  # progress reporting must never sink a run
+    except Exception:  # noqa: BLE001, S110 - progress reporting must never sink a run
         pass
 
 
@@ -216,8 +219,8 @@ def run_pipeline(
             try:
                 result = runner(rows, tool_opts)
                 state = "done"
-            except Exception as exc:  # never let one audit sink the whole pipeline
-                from readypack.common import ToolResult  # noqa: E402
+            except Exception as exc:  # noqa: BLE001 - tool failures become error envelopes
+                from readypack.common import ToolResult
 
                 result = ToolResult(
                     status="error",
@@ -272,8 +275,8 @@ def run_pipeline(
     try:
         rp_result = run_readypack(rows, rp_opts)
         state = "done"
-    except Exception as exc:
-        from readypack.common import ToolResult  # noqa: E402
+    except Exception as exc:  # noqa: BLE001 - packaging failures become error envelopes
+        from readypack.common import ToolResult
 
         rp_result = ToolResult(status="error", findings=[], warnings=[str(exc)], summary={"checked": len(rows)})
         state = "error"

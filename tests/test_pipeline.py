@@ -1,9 +1,9 @@
 from pathlib import Path
 
 import pytest
+from readypack.common import ToolResult, load_rows
 
 from honestypipeline import RESULT_SCHEMA_VERSION, run_pipeline
-from readypack.common import ToolResult, load_rows
 
 SAMPLE = Path(__file__).resolve().parents[1] / "repos" / "EnrichAudit" / "examples" / "sample.csv"
 
@@ -75,7 +75,7 @@ def test_tool_runs_use_cache(tmp_path):
 
 
 def test_corroboration_tags_findings(monkeypatch):
-    import honestypipeline.pipeline as pipeline
+    from honestypipeline import pipeline
 
     def finding_tool(_rows, _opts):
         return ToolResult(
@@ -97,7 +97,7 @@ def test_corroboration_tags_findings(monkeypatch):
 
 
 def test_tool_error_is_captured(monkeypatch):
-    import honestypipeline.pipeline as pipeline
+    from honestypipeline import pipeline
 
     def broken(_rows, _opts):
         raise RuntimeError("boom")

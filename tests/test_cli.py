@@ -55,7 +55,7 @@ def test_fail_on_returns_one(capsys):
 
 
 def test_tool_error_returns_three(monkeypatch, capsys):
-    import honestypipeline.pipeline as pipeline
+    from honestypipeline import pipeline
 
     def broken(_rows, _opts):
         raise RuntimeError("boom")
