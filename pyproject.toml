@@ -51,3 +51,39 @@ extraPaths = [
 ]
 pythonVersion = "3.10"
 typeCheckingMode = "basic"
+
+
+[tool.pylint.main]
+# Mirror the runtime bootstrap in honestypipeline._paths so Pylint can resolve
+# the vendored tool imports without requiring every tool to be pip-installed.
+init-hook = "import sys; from pathlib import Path; root = Path('.').resolve(); sys.path[:0] = [str(root / 'repos' / name / 'src') for name in ('DecayWatch', 'EnrichAudit', 'FilterGap', 'LinguaCheck', 'NuanceBench', 'ReadyPack', 'SourceLock', 'WhyChanged')] + [str(root / 'src')]"
+
+[tool.pylint.format]
+max-line-length = 120
+
+[tool.pylint."messages control"]
+disable = [
+  "missing-module-docstring",
+  "missing-class-docstring",
+  "missing-function-docstring",
+  "too-many-arguments",
+  "too-many-positional-arguments",
+  "too-many-locals",
+  "too-many-instance-attributes",
+  "too-many-branches",
+  "too-many-statements",
+  "too-many-return-statements",
+  "too-few-public-methods",
+  "duplicate-code",
+  "broad-exception-caught",
+  "protected-access",
+  "import-outside-toplevel",
+  "wrong-import-position",
+  "wrong-import-order",
+  "ungrouped-imports",
+  "unused-argument",
+  "use-implicit-booleaness-not-comparison",
+]
+
+[tool.pylint.typecheck]
+ignored-modules = ["pytest"]
