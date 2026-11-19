@@ -94,8 +94,13 @@ def build_run_manifest(
 def cache_key(*, fingerprint: str, tool: str, version: str, options: dict[str, Any]) -> str:
     """Content-addressed cache key: input bytes + tool version + tool options."""
     payload = json.dumps(
-        {"schema": RESULT_SCHEMA_VERSION, "fingerprint": fingerprint, "tool": tool,
-         "version": version, "options": _json_safe(options)},
+        {
+            "schema": RESULT_SCHEMA_VERSION,
+            "fingerprint": fingerprint,
+            "tool": tool,
+            "version": version,
+            "options": _json_safe(options),
+        },
         sort_keys=True,
         separators=(",", ":"),
         ensure_ascii=False,

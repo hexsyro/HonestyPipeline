@@ -25,8 +25,16 @@ def test_run_pipeline_returns_envelope():
 def test_run_pipeline_all_tools_present():
     rows = _rows()
     result = run_pipeline(rows)
-    expected = {"decaywatch", "enrichaudit", "filtergap", "linguacheck",
-                "nuancebench", "sourcelock", "whychanged", "readypack"}
+    expected = {
+        "decaywatch",
+        "enrichaudit",
+        "filtergap",
+        "linguacheck",
+        "nuancebench",
+        "sourcelock",
+        "whychanged",
+        "readypack",
+    }
     assert set(result.tools) | {"readypack"} == expected
 
 

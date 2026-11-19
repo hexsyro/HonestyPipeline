@@ -18,4 +18,3 @@ __all__ = [
 
 PipelineResult = _pipeline.PipelineResult
 run_pipeline = _pipeline.run_pipeline
-

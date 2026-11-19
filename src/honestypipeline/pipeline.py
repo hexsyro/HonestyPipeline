@@ -187,9 +187,7 @@ def run_pipeline(
     only = _name_list(options.get("only"), "only")
     skip = _name_list(options.get("skip"), "skip")
     selected = [
-        name
-        for name, _ in RUNNERS
-        if (not only or name in only) and name not in skip and _tool_enabled(name, options)
+        name for name, _ in RUNNERS if (not only or name in only) and name not in skip and _tool_enabled(name, options)
     ]
     cache_dir = options.get("cache_dir")
     use_cache = bool(cache_dir) and not options.get("no_cache")

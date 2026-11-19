@@ -52,7 +52,9 @@ def build_parser() -> argparse.ArgumentParser:
         help="output format (default: table)",
     )
     parser.add_argument("--output", "-o", metavar="FILE", help="write the report to FILE instead of stdout")
-    parser.add_argument("--out", metavar="DIR", help="write the packaged output (cleaned.csv + docs + package.zip) to DIR")
+    parser.add_argument(
+        "--out", metavar="DIR", help="write the packaged output (cleaned.csv + docs + package.zip) to DIR"
+    )
     parser.add_argument(
         "--fail-on",
         choices=["none", "low", "medium", "high"],
@@ -248,7 +250,9 @@ def main(argv: list[str] | None = None) -> int:
         if worst and SEVERITY_RANK.get(str(worst).lower(), 0) >= SEVERITY_RANK[args.fail_on.lower()]:
             gate_tripped = True
 
-    tool_error = any(env.get("status") == "error" for env in result.tools.values()) or result.readypack.get("status") == "error"
+    tool_error = (
+        any(env.get("status") == "error" for env in result.tools.values()) or result.readypack.get("status") == "error"
+    )
     if tool_error:
         return 3
     if gate_tripped or (args.fail_on_regression and regressed):
